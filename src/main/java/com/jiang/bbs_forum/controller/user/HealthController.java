@@ -12,7 +12,9 @@ import java.util.Map;
 @RequestMapping("/api")
 public class HealthController {
 
-    /** 服务健康检查 */
+    /**
+     * 服务健康检查
+     */
     @GetMapping("/health")
     public Response<Map<String, String>> health() {
         return Response.success(Map.of(

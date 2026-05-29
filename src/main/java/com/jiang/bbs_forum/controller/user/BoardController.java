@@ -4,7 +4,10 @@ import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.response.BoardVO;
 import com.jiang.bbs_forum.service.user.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -15,13 +18,17 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    /** 获取所有板块 */
+    /**
+     * 获取所有板块
+     */
     @GetMapping
     public Response<List<BoardVO>> listBoards() {
         return boardService.listBoards();
     }
 
-    /** 获取板块详情 */
+    /**
+     * 获取板块详情
+     */
     @GetMapping("/{id}")
     public Response<BoardVO> getBoardById(@PathVariable int id) {
         return boardService.getBoardById(id);

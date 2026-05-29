@@ -6,5 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileUploadService {
     Response<UploadVO> uploadAvatar(MultipartFile file);
+
     Response<UploadVO> uploadPostImage(MultipartFile file);
 }

@@ -2,11 +2,12 @@ package com.jiang.bbs_forum.service.user.impl;
 
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.response.BoardVO;
-import java.util.List;
 import com.jiang.bbs_forum.mapper.BoardMapper;
 import com.jiang.bbs_forum.service.user.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BoardServiceImpl implements BoardService {

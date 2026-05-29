@@ -7,6 +7,8 @@ import com.jiang.bbs_forum.dto.response.LoginVO;
 
 public interface AuthService {
     Response<LoginVO> register(RegisterRequest request);
+
     Response<LoginVO> login(LoginRequest request);
+
     Response<Void> logout(int userId);
 }

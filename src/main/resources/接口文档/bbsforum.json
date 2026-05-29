@@ -17,8 +17,12 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/health",
-              "host": ["{{base_url}}"],
-              "path": ["health"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
             }
           },
           "response": [
@@ -29,8 +33,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/health",
-                  "host": ["{{base_url}}"],
-                  "path": ["health"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
                 }
               },
               "status": "OK",
@@ -68,8 +76,13 @@
             },
             "url": {
               "raw": "{{base_url}}/auth/register",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "register"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
             }
           },
           "response": [
@@ -89,8 +102,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/auth/register",
-                  "host": ["{{base_url}}"],
-                  "path": ["auth", "register"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
                 }
               },
               "status": "Created",
@@ -121,8 +139,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/auth/register",
-                  "host": ["{{base_url}}"],
-                  "path": ["auth", "register"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -170,8 +193,13 @@
             },
             "url": {
               "raw": "{{base_url}}/auth/login",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "login"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
             }
           },
           "response": [
@@ -191,8 +219,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/auth/login",
-                  "host": ["{{base_url}}"],
-                  "path": ["auth", "login"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
                 }
               },
               "status": "OK",
@@ -223,8 +256,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/auth/login",
-                  "host": ["{{base_url}}"],
-                  "path": ["auth", "login"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -253,8 +291,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/auth/logout",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "logout"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
             }
           },
           "response": [
@@ -270,8 +313,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/auth/logout",
-                  "host": ["{{base_url}}"],
-                  "path": ["auth", "logout"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
                 }
               },
               "status": "OK",
@@ -305,8 +353,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/users/current",
-              "host": ["{{base_url}}"],
-              "path": ["users", "current"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "current"
+              ]
             }
           },
           "response": [
@@ -322,8 +375,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/users/current",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "current"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "current"
+                  ]
                 }
               },
               "status": "OK",
@@ -347,8 +405,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/users/1",
-              "host": ["{{base_url}}"],
-              "path": ["users", "1"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
             }
           },
           "response": [
@@ -359,8 +422,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/users/1",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "1"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "1"
+                  ]
                 }
               },
               "status": "OK",
@@ -382,8 +450,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/users/999",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "999"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "999"
+                  ]
                 }
               },
               "status": "Not Found",
@@ -420,8 +493,13 @@
             },
             "url": {
               "raw": "{{base_url}}/users/profile",
-              "host": ["{{base_url}}"],
-              "path": ["users", "profile"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
             }
           },
           "response": [
@@ -445,8 +523,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/users/profile",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "profile"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile"
+                  ]
                 }
               },
               "status": "OK",
@@ -483,8 +566,13 @@
             },
             "url": {
               "raw": "{{base_url}}/users/password",
-              "host": ["{{base_url}}"],
-              "path": ["users", "password"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "password"
+              ]
             }
           },
           "response": [
@@ -508,8 +596,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/users/password",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "password"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "password"
+                  ]
                 }
               },
               "status": "OK",
@@ -544,8 +637,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/users/password",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "password"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "password"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -574,8 +672,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/users/points?page=1&size=10",
-              "host": ["{{base_url}}"],
-              "path": ["users", "points"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "points"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -601,8 +704,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/users/points?page=1&size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "points"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "points"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -636,8 +744,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/users/points/rank?size=10",
-              "host": ["{{base_url}}"],
-              "path": ["users", "points", "rank"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "points",
+                "rank"
+              ],
               "query": [
                 {
                   "key": "size",
@@ -654,8 +768,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/users/points/rank?size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "points", "rank"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "points",
+                    "rank"
+                  ],
                   "query": [
                     {
                       "key": "size",
@@ -690,8 +810,12 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/boards",
-              "host": ["{{base_url}}"],
-              "path": ["boards"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "boards"
+              ]
             }
           },
           "response": [
@@ -702,8 +826,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/boards",
-                  "host": ["{{base_url}}"],
-                  "path": ["boards"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "boards"
+                  ]
                 }
               },
               "status": "OK",
@@ -727,8 +855,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/boards/1",
-              "host": ["{{base_url}}"],
-              "path": ["boards", "1"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "boards",
+                "1"
+              ]
             }
           },
           "response": [
@@ -739,8 +872,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/boards/1",
-                  "host": ["{{base_url}}"],
-                  "path": ["boards", "1"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "boards",
+                    "1"
+                  ]
                 }
               },
               "status": "OK",
@@ -777,8 +915,13 @@
             },
             "url": {
               "raw": "{{base_url}}/admin/boards",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "boards"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "boards"
+              ]
             }
           },
           "response": [
@@ -802,8 +945,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/boards",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "boards"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "boards"
+                  ]
                 }
               },
               "status": "Created",
@@ -840,8 +988,14 @@
             },
             "url": {
               "raw": "{{base_url}}/admin/boards/6",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "boards", "6"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "boards",
+                "6"
+              ]
             }
           },
           "response": [
@@ -865,8 +1019,14 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/boards/6",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "boards", "6"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "boards",
+                    "6"
+                  ]
                 }
               },
               "status": "OK",
@@ -895,8 +1055,14 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin/boards/6",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "boards", "6"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "boards",
+                "6"
+              ]
             }
           },
           "response": [
@@ -912,8 +1078,14 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin/boards/6",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "boards", "6"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "boards",
+                    "6"
+                  ]
                 }
               },
               "status": "OK",
@@ -942,8 +1114,12 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/posts?boardId=1&keyword=Spring&page=1&size=10&orderBy=createTime",
-              "host": ["{{base_url}}"],
-              "path": ["posts"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts"
+              ],
               "query": [
                 {
                   "key": "boardId",
@@ -976,8 +1152,12 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/posts?boardId=1&keyword=Spring&page=1&size=10&orderBy=createTime",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ],
                   "query": [
                     {
                       "key": "boardId",
@@ -1023,8 +1203,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/posts/hot?size=10",
-              "host": ["{{base_url}}"],
-              "path": ["posts", "hot"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "hot"
+              ],
               "query": [
                 {
                   "key": "size",
@@ -1041,8 +1226,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/posts/hot?size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts", "hot"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "hot"
+                  ],
                   "query": [
                     {
                       "key": "size",
@@ -1072,8 +1262,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/posts/1",
-              "host": ["{{base_url}}"],
-              "path": ["posts", "1"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
             }
           },
           "response": [
@@ -1084,8 +1279,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/posts/1",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts", "1"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "1"
+                  ]
                 }
               },
               "status": "OK",
@@ -1122,8 +1322,12 @@
             },
             "url": {
               "raw": "{{base_url}}/posts",
-              "host": ["{{base_url}}"],
-              "path": ["posts"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts"
+              ]
             }
           },
           "response": [
@@ -1147,8 +1351,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/posts",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ]
                 }
               },
               "status": "Created",
@@ -1185,8 +1393,12 @@
             },
             "url": {
               "raw": "{{base_url}}/posts",
-              "host": ["{{base_url}}"],
-              "path": ["posts"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts"
+              ]
             }
           },
           "response": [
@@ -1210,8 +1422,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/posts",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ]
                 }
               },
               "status": "Created",
@@ -1246,8 +1462,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/posts",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -1284,8 +1504,13 @@
             },
             "url": {
               "raw": "{{base_url}}/posts/6",
-              "host": ["{{base_url}}"],
-              "path": ["posts", "6"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "6"
+              ]
             }
           },
           "response": [
@@ -1309,8 +1534,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/posts/6",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts", "6"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "6"
+                  ]
                 }
               },
               "status": "OK",
@@ -1345,8 +1575,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/posts/1",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts", "1"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "1"
+                  ]
                 }
               },
               "status": "Forbidden",
@@ -1375,8 +1610,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/posts/6",
-              "host": ["{{base_url}}"],
-              "path": ["posts", "6"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "6"
+              ]
             }
           },
           "response": [
@@ -1392,8 +1632,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/posts/6",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts", "6"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "6"
+                  ]
                 }
               },
               "status": "OK",
@@ -1420,8 +1665,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/posts/1",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts", "1"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "1"
+                  ]
                 }
               },
               "status": "Forbidden",
@@ -1458,8 +1708,15 @@
             },
             "url": {
               "raw": "{{base_url}}/admin/posts/1/top",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "posts", "1", "top"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "posts",
+                "1",
+                "top"
+              ]
             }
           },
           "response": [
@@ -1483,8 +1740,15 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/posts/1/top",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "posts", "1", "top"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "posts",
+                    "1",
+                    "top"
+                  ]
                 }
               },
               "status": "OK",
@@ -1519,8 +1783,15 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/posts/1/top",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "posts", "1", "top"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "posts",
+                    "1",
+                    "top"
+                  ]
                 }
               },
               "status": "OK",
@@ -1557,8 +1828,15 @@
             },
             "url": {
               "raw": "{{base_url}}/admin/posts/1/essence",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "posts", "1", "essence"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "posts",
+                "1",
+                "essence"
+              ]
             }
           },
           "response": [
@@ -1582,8 +1860,15 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/posts/1/essence",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "posts", "1", "essence"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "posts",
+                    "1",
+                    "essence"
+                  ]
                 }
               },
               "status": "OK",
@@ -1618,8 +1903,15 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/posts/1/essence",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "posts", "1", "essence"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "posts",
+                    "1",
+                    "essence"
+                  ]
                 }
               },
               "status": "OK",
@@ -1648,8 +1940,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/users/posts?page=1&size=10",
-              "host": ["{{base_url}}"],
-              "path": ["users", "posts"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "posts"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -1675,8 +1972,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/users/posts?page=1&size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "posts"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "posts"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -1715,8 +2017,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/posts/1/comments?page=1&size=20",
-              "host": ["{{base_url}}"],
-              "path": ["posts", "1", "comments"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1",
+                "comments"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -1737,8 +2045,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/posts/1/comments?page=1&size=20",
-                  "host": ["{{base_url}}"],
-                  "path": ["posts", "1", "comments"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "1",
+                    "comments"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -1785,8 +2099,12 @@
             },
             "url": {
               "raw": "{{base_url}}/comments",
-              "host": ["{{base_url}}"],
-              "path": ["comments"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comments"
+              ]
             }
           },
           "response": [
@@ -1810,8 +2128,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/comments",
-                  "host": ["{{base_url}}"],
-                  "path": ["comments"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "comments"
+                  ]
                 }
               },
               "status": "Created",
@@ -1848,8 +2170,12 @@
             },
             "url": {
               "raw": "{{base_url}}/comments",
-              "host": ["{{base_url}}"],
-              "path": ["comments"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comments"
+              ]
             }
           },
           "response": [
@@ -1873,8 +2199,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/comments",
-                  "host": ["{{base_url}}"],
-                  "path": ["comments"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "comments"
+                  ]
                 }
               },
               "status": "Created",
@@ -1911,8 +2241,13 @@
             },
             "url": {
               "raw": "{{base_url}}/comments/9",
-              "host": ["{{base_url}}"],
-              "path": ["comments", "9"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comments",
+                "9"
+              ]
             }
           },
           "response": [
@@ -1936,8 +2271,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/comments/9",
-                  "host": ["{{base_url}}"],
-                  "path": ["comments", "9"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "comments",
+                    "9"
+                  ]
                 }
               },
               "status": "OK",
@@ -1972,8 +2312,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/comments/1",
-                  "host": ["{{base_url}}"],
-                  "path": ["comments", "1"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "comments",
+                    "1"
+                  ]
                 }
               },
               "status": "Forbidden",
@@ -2002,8 +2347,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/comments/9",
-              "host": ["{{base_url}}"],
-              "path": ["comments", "9"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comments",
+                "9"
+              ]
             }
           },
           "response": [
@@ -2019,8 +2369,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/comments/9",
-                  "host": ["{{base_url}}"],
-                  "path": ["comments", "9"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "comments",
+                    "9"
+                  ]
                 }
               },
               "status": "OK",
@@ -2047,8 +2402,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/comments/1",
-                  "host": ["{{base_url}}"],
-                  "path": ["comments", "1"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "comments",
+                    "1"
+                  ]
                 }
               },
               "status": "Forbidden",
@@ -2077,8 +2437,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/users/comments?page=1&size=10",
-              "host": ["{{base_url}}"],
-              "path": ["users", "comments"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "comments"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -2104,8 +2469,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/users/comments?page=1&size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "comments"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "comments"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -2157,8 +2527,12 @@
             },
             "url": {
               "raw": "{{base_url}}/likes",
-              "host": ["{{base_url}}"],
-              "path": ["likes"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "likes"
+              ]
             }
           },
           "response": [
@@ -2182,8 +2556,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/likes",
-                  "host": ["{{base_url}}"],
-                  "path": ["likes"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "likes"
+                  ]
                 }
               },
               "status": "Created",
@@ -2218,8 +2596,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/likes",
-                  "host": ["{{base_url}}"],
-                  "path": ["likes"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "likes"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -2256,8 +2638,12 @@
             },
             "url": {
               "raw": "{{base_url}}/likes",
-              "host": ["{{base_url}}"],
-              "path": ["likes"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "likes"
+              ]
             }
           },
           "response": [
@@ -2281,8 +2667,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/likes",
-                  "host": ["{{base_url}}"],
-                  "path": ["likes"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "likes"
+                  ]
                 }
               },
               "status": "Created",
@@ -2311,8 +2701,12 @@
             ],
             "url": {
               "raw": "{{base_url}}/likes?targetType=1&targetId=1",
-              "host": ["{{base_url}}"],
-              "path": ["likes"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "likes"
+              ],
               "query": [
                 {
                   "key": "targetType",
@@ -2338,8 +2732,12 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/likes?targetType=1&targetId=1",
-                  "host": ["{{base_url}}"],
-                  "path": ["likes"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "likes"
+                  ],
                   "query": [
                     {
                       "key": "targetType",
@@ -2386,8 +2784,12 @@
             },
             "url": {
               "raw": "{{base_url}}/favorites",
-              "host": ["{{base_url}}"],
-              "path": ["favorites"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "favorites"
+              ]
             }
           },
           "response": [
@@ -2411,8 +2813,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/favorites",
-                  "host": ["{{base_url}}"],
-                  "path": ["favorites"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "favorites"
+                  ]
                 }
               },
               "status": "Created",
@@ -2447,8 +2853,12 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/favorites",
-                  "host": ["{{base_url}}"],
-                  "path": ["favorites"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "favorites"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -2477,8 +2887,12 @@
             ],
             "url": {
               "raw": "{{base_url}}/favorites?postId=1",
-              "host": ["{{base_url}}"],
-              "path": ["favorites"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "favorites"
+              ],
               "query": [
                 {
                   "key": "postId",
@@ -2500,8 +2914,12 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/favorites?postId=1",
-                  "host": ["{{base_url}}"],
-                  "path": ["favorites"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "favorites"
+                  ],
                   "query": [
                     {
                       "key": "postId",
@@ -2536,8 +2954,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/users/favorites?page=1&size=10",
-              "host": ["{{base_url}}"],
-              "path": ["users", "favorites"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "favorites"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -2563,8 +2986,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/users/favorites?page=1&size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["users", "favorites"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "favorites"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -2608,8 +3036,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin/users?keyword=test&page=1&size=10",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "users"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ],
               "query": [
                 {
                   "key": "keyword",
@@ -2639,8 +3072,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin/users?keyword=test&page=1&size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "users"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users"
+                  ],
                   "query": [
                     {
                       "key": "keyword",
@@ -2691,8 +3129,15 @@
             },
             "url": {
               "raw": "{{base_url}}/admin/users/2/status",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "users", "2", "status"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "2",
+                "status"
+              ]
             }
           },
           "response": [
@@ -2716,8 +3161,15 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/users/2/status",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "users", "2", "status"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users",
+                    "2",
+                    "status"
+                  ]
                 }
               },
               "status": "OK",
@@ -2754,8 +3206,15 @@
             },
             "url": {
               "raw": "{{base_url}}/admin/users/2/status",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "users", "2", "status"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "2",
+                "status"
+              ]
             }
           },
           "response": [
@@ -2779,8 +3238,15 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/admin/users/2/status",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "users", "2", "status"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users",
+                    "2",
+                    "status"
+                  ]
                 }
               },
               "status": "OK",
@@ -2809,8 +3275,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin/logs?page=1&size=10",
-              "host": ["{{base_url}}"],
-              "path": ["admin", "logs"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "logs"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -2836,8 +3307,13 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin/logs?page=1&size=10",
-                  "host": ["{{base_url}}"],
-                  "path": ["admin", "logs"],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "logs"
+                  ],
                   "query": [
                     {
                       "key": "page",
@@ -2891,8 +3367,13 @@
             },
             "url": {
               "raw": "{{base_url}}/upload/avatar",
-              "host": ["{{base_url}}"],
-              "path": ["upload", "avatar"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "upload",
+                "avatar"
+              ]
             }
           },
           "response": [
@@ -2918,8 +3399,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/upload/avatar",
-                  "host": ["{{base_url}}"],
-                  "path": ["upload", "avatar"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "upload",
+                    "avatar"
+                  ]
                 }
               },
               "status": "OK",
@@ -2956,8 +3442,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/upload/avatar",
-                  "host": ["{{base_url}}"],
-                  "path": ["upload", "avatar"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "upload",
+                    "avatar"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -2994,8 +3485,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/upload/avatar",
-                  "host": ["{{base_url}}"],
-                  "path": ["upload", "avatar"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "upload",
+                    "avatar"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -3034,8 +3530,13 @@
             },
             "url": {
               "raw": "{{base_url}}/upload/post",
-              "host": ["{{base_url}}"],
-              "path": ["upload", "post"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "upload",
+                "post"
+              ]
             }
           },
           "response": [
@@ -3061,8 +3562,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/upload/post",
-                  "host": ["{{base_url}}"],
-                  "path": ["upload", "post"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "upload",
+                    "post"
+                  ]
                 }
               },
               "status": "OK",
@@ -3099,8 +3605,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/upload/post",
-                  "host": ["{{base_url}}"],
-                  "path": ["upload", "post"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "upload",
+                    "post"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -3137,8 +3648,13 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/upload/post",
-                  "host": ["{{base_url}}"],
-                  "path": ["upload", "post"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "upload",
+                    "post"
+                  ]
                 }
               },
               "status": "Bad Request",
@@ -3163,14 +3679,18 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     }
   ],

@@ -1,16 +1,17 @@
 package com.jiang.bbs_forum.service.user.impl;
 
-import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.common.PageResponse;
-import com.jiang.bbs_forum.dto.response.*;
-import java.util.List;
+import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.ChangePasswordRequest;
 import com.jiang.bbs_forum.dto.request.UpdateProfileRequest;
+import com.jiang.bbs_forum.dto.response.*;
 import com.jiang.bbs_forum.mapper.*;
 import com.jiang.bbs_forum.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {

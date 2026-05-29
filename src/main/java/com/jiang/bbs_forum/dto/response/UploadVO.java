@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+/** 文件上传响应 */
 public class UploadVO {
+    /**
+     * 文件URL
+     */
     private String url;
 }

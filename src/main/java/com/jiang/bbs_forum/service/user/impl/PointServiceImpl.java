@@ -1,7 +1,5 @@
 package com.jiang.bbs_forum.service.user.impl;
 
-import com.jiang.bbs_forum.entity.PointRecord;
-import com.jiang.bbs_forum.entity.User;
 import com.jiang.bbs_forum.mapper.PointRecordMapper;
 import com.jiang.bbs_forum.mapper.UserMapper;
 import com.jiang.bbs_forum.service.user.PointService;

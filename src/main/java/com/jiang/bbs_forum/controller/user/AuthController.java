@@ -16,19 +16,25 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    /** 用户注册 */
+    /**
+     * 用户注册
+     */
     @PostMapping("/register")
     public Response<LoginVO> register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
     }
 
-    /** 用户登录 */
+    /**
+     * 用户登录
+     */
     @PostMapping("/login")
     public Response<LoginVO> login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 
-    /** 退出登录 */
+    /**
+     * 退出登录
+     */
     @PostMapping("/logout")
     public Response<Void> logout(@RequestAttribute("userId") int userId) {
         return authService.logout(userId);

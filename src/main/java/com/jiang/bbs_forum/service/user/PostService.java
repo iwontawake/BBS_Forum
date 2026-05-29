@@ -10,9 +10,14 @@ import java.util.List;
 
 public interface PostService {
     Response<PageResponse<PostVO>> listPosts(Integer boardId, String keyword, int page, int size, String orderBy);
+
     Response<List<PostVO>> getHotPosts(int size);
+
     Response<PostVO> getPostById(int id);
+
     Response<PostVO> createPost(int userId, CreatePostRequest request);
+
     Response<PostVO> updatePost(int userId, int postId, UpdatePostRequest request);
+
     Response<Void> deletePost(int userId, int postId);
 }

@@ -1,9 +1,9 @@
 package com.jiang.bbs_forum.service.user.impl;
 
 import com.jiang.bbs_forum.common.Response;
-import com.jiang.bbs_forum.dto.response.LoginVO;
 import com.jiang.bbs_forum.dto.request.LoginRequest;
 import com.jiang.bbs_forum.dto.request.RegisterRequest;
+import com.jiang.bbs_forum.dto.response.LoginVO;
 import com.jiang.bbs_forum.mapper.UserMapper;
 import com.jiang.bbs_forum.mapper.UserProfileMapper;
 import com.jiang.bbs_forum.service.user.AuthService;

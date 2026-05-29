@@ -4,5 +4,6 @@ import com.jiang.bbs_forum.common.Response;
 
 public interface LikeService {
     Response<Void> like(int userId, int targetType, int targetId);
+
     Response<Void> unlike(int userId, int targetType, int targetId);
 }

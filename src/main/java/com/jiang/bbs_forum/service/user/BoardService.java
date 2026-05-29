@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface BoardService {
     Response<List<BoardVO>> listBoards();
+
     Response<BoardVO> getBoardById(int id);
 }
