@@ -1,6 +1,7 @@
 package com.jiang.bbs_forum.service.user.impl;
 
 import com.jiang.bbs_forum.common.Response;
+import com.jiang.bbs_forum.dto.response.UploadVO;
 import com.jiang.bbs_forum.mapper.UserProfileMapper;
 import com.jiang.bbs_forum.service.user.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     private String uploadPath;
 
     @Override
-    public Response<?> uploadAvatar(MultipartFile file) {
+    public Response<UploadVO> uploadAvatar(MultipartFile file) {
         // TODO: 1. 校验文件类型（jpg/png/gif）
         // TODO: 2. 校验文件大小（不超过2MB）
         // TODO: 3. 保存文件到 uploads/avatar/ 目录
@@ -27,7 +28,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
-    public Response<?> uploadPostImage(MultipartFile file) {
+    public Response<UploadVO> uploadPostImage(MultipartFile file) {
         // TODO: 1. 校验文件类型（jpg/png/gif）
         // TODO: 2. 校验文件大小（不超过5MB）
         // TODO: 3. 保存文件到 uploads/post/ 目录

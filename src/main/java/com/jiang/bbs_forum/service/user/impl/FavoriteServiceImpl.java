@@ -13,14 +13,14 @@ public class FavoriteServiceImpl implements FavoriteService {
     private FavoriteMapper favoriteMapper;
 
     @Override
-    public Response<?> favorite(int userId, int postId) {
+    public Response<Void> favorite(int userId, int postId) {
         // TODO: 1. 检查是否已收藏（联合唯一索引防重复）
         // TODO: 2. 插入favorite记录
         return null;
     }
 
     @Override
-    public Response<?> unfavorite(int userId, int postId) {
+    public Response<Void> unfavorite(int userId, int postId) {
         // TODO: 删除favorite记录
         return null;
     }

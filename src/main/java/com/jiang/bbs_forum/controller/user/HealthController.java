@@ -12,9 +12,9 @@ import java.util.Map;
 @RequestMapping("/api")
 public class HealthController {
 
+    /** 服务健康检查 */
     @GetMapping("/health")
-    public Response<?> health() {
-        // TODO: 可扩展检查数据库连接状态
+    public Response<Map<String, String>> health() {
         return Response.success(Map.of(
                 "timestamp", LocalDateTime.now().toString(),
                 "version", "1.0.0"

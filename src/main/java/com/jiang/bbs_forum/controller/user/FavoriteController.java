@@ -14,17 +14,17 @@ public class FavoriteController {
     @Autowired
     private FavoriteService favoriteService;
 
-    // POST /api/favorites — 收藏帖子
+    /** 收藏帖子 */
     @PostMapping
-    public Response<?> favorite(@RequestAttribute("userId") int userId,
-                                @Valid @RequestBody FavoriteRequest request) {
+    public Response<Void> favorite(@RequestAttribute("userId") int userId,
+                                    @Valid @RequestBody FavoriteRequest request) {
         return favoriteService.favorite(userId, request.getPostId());
     }
 
-    // DELETE /api/favorites — 取消收藏（?postId=xxx）
+    /** 取消收藏 */
     @DeleteMapping
-    public Response<?> unfavorite(@RequestAttribute("userId") int userId,
-                                  @RequestParam int postId) {
+    public Response<Void> unfavorite(@RequestAttribute("userId") int userId,
+                                      @RequestParam int postId) {
         return favoriteService.unfavorite(userId, postId);
     }
 }

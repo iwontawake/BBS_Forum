@@ -1,12 +1,16 @@
 package com.jiang.bbs_forum.controller.user;
 
+import com.jiang.bbs_forum.common.PageResponse;
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.ChangePasswordRequest;
 import com.jiang.bbs_forum.dto.request.UpdateProfileRequest;
+import com.jiang.bbs_forum.dto.response.*;
 import com.jiang.bbs_forum.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,67 +19,71 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // GET /api/users/current — 获取当前用户信息
+    /** 获取当前用户完整信息 */
     @GetMapping("/current")
-    public Response<?> getCurrentUser(@RequestAttribute("userId") int userId) {
+    public Response<UserVO> getCurrentUser(@RequestAttribute("userId") int userId) {
         return userService.getCurrentUser(userId);
     }
 
-    // GET /api/users/{id} — 获取用户公开信息
+    /** 获取用户公开信息 */
     @GetMapping("/{id}")
-    public Response<?> getUserById(@PathVariable int id) {
+    public Response<UserVO> getUserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
 
-    // PUT /api/users/profile — 修改个人资料
+    /** 修改个人资料 */
     @PutMapping("/profile")
-    public Response<?> updateProfile(@RequestAttribute("userId") int userId,
-                                     @Valid @RequestBody UpdateProfileRequest request) {
+    public Response<ProfileVO> updateProfile(@RequestAttribute("userId") int userId,
+                                              @Valid @RequestBody UpdateProfileRequest request) {
         return userService.updateProfile(userId, request);
     }
 
-    // PUT /api/users/password — 修改密码
+    /** 修改密码 */
     @PutMapping("/password")
-    public Response<?> changePassword(@RequestAttribute("userId") int userId,
-                                      @Valid @RequestBody ChangePasswordRequest request) {
+    public Response<Void> changePassword(@RequestAttribute("userId") int userId,
+                                          @Valid @RequestBody ChangePasswordRequest request) {
         return userService.changePassword(userId, request);
     }
 
-    // GET /api/users/points — 获取我的积分记录
+    /** 获取我的积分记录（分页） */
     @GetMapping("/points")
-    public Response<?> getPointRecords(@RequestAttribute("userId") int userId,
-                                       @RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "10") int size) {
+    public Response<PageResponse<PointRecordVO>> getPointRecords(
+            @RequestAttribute("userId") int userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         return userService.getPointRecords(userId, page, size);
     }
 
-    // GET /api/users/points/rank — 积分排行榜
+    /** 积分排行榜 */
     @GetMapping("/points/rank")
-    public Response<?> getPointsRank(@RequestParam(defaultValue = "10") int size) {
+    public Response<List<RankItemVO>> getPointsRank(@RequestParam(defaultValue = "10") int size) {
         return userService.getPointsRank(size);
     }
 
-    // GET /api/users/posts — 获取我的帖子
+    /** 获取我的帖子（分页） */
     @GetMapping("/posts")
-    public Response<?> getMyPosts(@RequestAttribute("userId") int userId,
-                                  @RequestParam(defaultValue = "1") int page,
-                                  @RequestParam(defaultValue = "10") int size) {
+    public Response<PageResponse<PostVO>> getMyPosts(
+            @RequestAttribute("userId") int userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         return userService.getMyPosts(userId, page, size);
     }
 
-    // GET /api/users/comments — 获取我的回复
+    /** 获取我的回复（分页） */
     @GetMapping("/comments")
-    public Response<?> getMyComments(@RequestAttribute("userId") int userId,
-                                     @RequestParam(defaultValue = "1") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
+    public Response<PageResponse<CommentVO>> getMyComments(
+            @RequestAttribute("userId") int userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         return userService.getMyComments(userId, page, size);
     }
 
-    // GET /api/users/favorites — 获取我的收藏
+    /** 获取我的收藏（分页） */
     @GetMapping("/favorites")
-    public Response<?> getMyFavorites(@RequestAttribute("userId") int userId,
-                                      @RequestParam(defaultValue = "1") int page,
-                                      @RequestParam(defaultValue = "10") int size) {
+    public Response<PageResponse<PostVO>> getMyFavorites(
+            @RequestAttribute("userId") int userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         return userService.getMyFavorites(userId, page, size);
     }
 }

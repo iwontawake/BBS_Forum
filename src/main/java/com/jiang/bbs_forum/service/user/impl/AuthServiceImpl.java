@@ -1,6 +1,7 @@
 package com.jiang.bbs_forum.service.user.impl;
 
 import com.jiang.bbs_forum.common.Response;
+import com.jiang.bbs_forum.dto.response.LoginVO;
 import com.jiang.bbs_forum.dto.request.LoginRequest;
 import com.jiang.bbs_forum.dto.request.RegisterRequest;
 import com.jiang.bbs_forum.mapper.UserMapper;
@@ -27,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private PointService pointService;
 
     @Override
-    public Response<?> register(RegisterRequest request) {
+    public Response<LoginVO> register(RegisterRequest request) {
         // TODO: 1. 校验用户名和邮箱是否已存在
         // TODO: 2. BCrypt加密密码
         // TODO: 3. 插入user表（默认role=user, points=100）
@@ -38,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Response<?> login(LoginRequest request) {
+    public Response<LoginVO> login(LoginRequest request) {
         // TODO: 1. 根据username查询用户
         // TODO: 2. 校验密码、用户状态
         // TODO: 3. 更新last_login_time和login_count
@@ -47,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Response<?> logout(int userId) {
+    public Response<Void> logout(int userId) {
         // TODO: 退出登录（客户端删除token即可，如需黑名单可在此实现）
         return Response.success("退出成功", null);
     }

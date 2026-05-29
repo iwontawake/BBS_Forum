@@ -1,8 +1,11 @@
 package com.jiang.bbs_forum.service.user;
 
 import com.jiang.bbs_forum.common.Response;
+import com.jiang.bbs_forum.dto.response.BoardVO;
+
+import java.util.List;
 
 public interface BoardService {
-    Response<?> listBoards();
-    Response<?> getBoardById(int id);
+    Response<List<BoardVO>> listBoards();
+    Response<BoardVO> getBoardById(int id);
 }
