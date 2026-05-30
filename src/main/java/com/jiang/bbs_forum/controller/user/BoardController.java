@@ -27,7 +27,7 @@ public class BoardController {
     }
 
     /**
-     * 获取板块详情
+     * 根据板块ID获取详情
      */
     @GetMapping("/{id}")
     public Response<BoardVO> getBoardById(@PathVariable int id) {

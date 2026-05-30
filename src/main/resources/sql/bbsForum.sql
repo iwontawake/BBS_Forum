@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `system_logs`
 -- ==================== 初始测试数据 ====================
 -- 插入默认管理员账号（用户名：admin，密码：123456，已BCrypt加密）
 INSERT INTO `user` (`username`, `password`, `email`, `role`, `points`)
-VALUES ('admin', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 'admin@ncsu.edu.cn', 'admin', 1100);
+VALUES ('admin', '$2a$10$CaD4RA5qDa.lke2gMSO3u.zf3WtW6I5OEZgWoGoOqUivfNgxf05c6', 'admin@ncsu.edu.cn', 'admin', 1100);
 
 -- 插入管理员个人资料
 INSERT INTO `user_profile` (`user_id`, `nickname`, `signature`)

@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.service.user.impl;
 
+import com.jiang.bbs_forum.entity.PointRecord;
+import com.jiang.bbs_forum.entity.User;
 import com.jiang.bbs_forum.mapper.PointRecordMapper;
 import com.jiang.bbs_forum.mapper.UserMapper;
 import com.jiang.bbs_forum.service.user.PointService;
@@ -18,14 +20,40 @@ public class PointServiceImpl implements PointService {
     @Override
     @Transactional
     public void addPoints(int userId, int points, String reason) {
-        // TODO: 1. 增加用户积分
-        // TODO: 2. 插入积分记录（type=1获得，points=正数，balance=变动后余额）
+        User user = userMapper.selectById(userId);
+        int balance = user.getPoints() + points;
+
+        User updateUser = new User();
+        updateUser.setId(userId);
+        updateUser.setPoints(balance);
+        userMapper.updateById(updateUser);
+
+        PointRecord record = new PointRecord();
+        record.setUserId(userId);
+        record.setType(1);
+        record.setReason(reason);
+        record.setPoints(points);
+        record.setBalance(balance);
+        pointRecordMapper.insert(record);
     }
 
     @Override
     @Transactional
     public void consumePoints(int userId, int points, String reason) {
-        // TODO: 1. 扣减用户积分
-        // TODO: 2. 插入积分记录（type=2消耗，points=负数，balance=变动后余额）
+        User user = userMapper.selectById(userId);
+        int balance = user.getPoints() - points;
+
+        User updateUser = new User();
+        updateUser.setId(userId);
+        updateUser.setPoints(balance);
+        userMapper.updateById(updateUser);
+
+        PointRecord record = new PointRecord();
+        record.setUserId(userId);
+        record.setType(2);
+        record.setReason(reason);
+        record.setPoints(-points);
+        record.setBalance(balance);
+        pointRecordMapper.insert(record);
     }
 }

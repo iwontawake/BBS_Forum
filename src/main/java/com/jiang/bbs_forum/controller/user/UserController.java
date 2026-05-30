@@ -20,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     /**
-     * 获取当前用户完整信息
+     * 获取当前登录用户完整信息
      */
     @GetMapping("/current")
     public Response<UserVO> getCurrentUser(@RequestAttribute("userId") int userId) {
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     /**
-     * 获取用户公开信息
+     * 根据用户ID获取公开信息
      */
     @GetMapping("/{id}")
     public Response<UserVO> getUserById(@PathVariable int id) {

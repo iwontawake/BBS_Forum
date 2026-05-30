@@ -41,7 +41,7 @@ public class PostController {
     }
 
     /**
-     * 获取帖子详情（浏览量+1）
+     * 根据帖子ID获取详情（浏览量+1）
      */
     @GetMapping("/{id}")
     public Response<PostVO> getPostById(@PathVariable int id) {
