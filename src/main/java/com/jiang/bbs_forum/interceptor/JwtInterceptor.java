@@ -1,6 +1,7 @@
 package com.jiang.bbs_forum.interceptor;
 
 import com.jiang.bbs_forum.util.JwtUtils;
+import com.jiang.bbs_forum.util.UserContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,11 +69,25 @@ public class JwtInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        log.info(">>> token校验通过, userId={}", jwtUtils.getUserId(token));
-        request.setAttribute("userId", jwtUtils.getUserId(token));
-        request.setAttribute("username", jwtUtils.parseToken(token).get("username"));
-        request.setAttribute("role", jwtUtils.parseToken(token).get("role"));
+        int userId = jwtUtils.getUserId(token);
+        String username = (String) jwtUtils.parseToken(token).get("username");
+        String role = (String) jwtUtils.parseToken(token).get("role");
+
+        log.info(">>> token校验通过, userId={}", userId);
+        request.setAttribute("userId", userId);
+        request.setAttribute("username", username);
+        request.setAttribute("role", role);
+
+        UserContext.setUserId(userId);
+        UserContext.setUsername(username);
+        UserContext.setRole(role);
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                                Object handler, Exception ex) {
+        UserContext.clear();
     }
 
     private boolean isPublicPath(String path, String method) {
