@@ -58,6 +58,14 @@ public class CommentVO {
      */
     private String createTime;
     /**
+     *  无效@用户
+     */
+    private List<String> invalidAtUsers;
+    /**
+     *  @用户列表
+     */
+    private List<AtUserVO> atUsers;
+    /**
      * 子回复列表
      */
     private List<CommentVO> children;

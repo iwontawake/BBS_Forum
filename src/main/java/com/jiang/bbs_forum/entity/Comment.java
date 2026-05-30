@@ -15,6 +15,7 @@ public class Comment {
     private Integer parentId;
     private String content;
     private Integer likeCount;
+    private String atUsernames;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)
