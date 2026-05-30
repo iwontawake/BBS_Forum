@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.controller.user;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.LoginRequest;
 import com.jiang.bbs_forum.dto.request.RegisterRequest;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -21,6 +24,7 @@ public class AuthController {
      */
     @PostMapping("/register")
     public Response<LoginVO> register(@Valid @RequestBody RegisterRequest request) {
+        log.info("POST /api/auth/register - 用户注册");
         return authService.register(request);
     }
 
@@ -29,6 +33,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public Response<LoginVO> login(@Valid @RequestBody LoginRequest request) {
+        log.info("POST /api/auth/login - 用户登录");
         return authService.login(request);
     }
 
@@ -37,6 +42,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public Response<Void> logout(@RequestAttribute("userId") int userId) {
+        log.info("POST /api/auth/logout - 退出登录");
         return authService.logout(userId);
     }
 }

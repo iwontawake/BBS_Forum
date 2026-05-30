@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.controller.user;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.response.UploadVO;
 import com.jiang.bbs_forum.service.user.FileUploadService;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/upload")
+@Slf4j
 public class UploadController {
 
     @Autowired
@@ -22,6 +25,7 @@ public class UploadController {
      */
     @PostMapping("/avatar")
     public Response<UploadVO> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        log.info("POST /api/upload/avatar - 上传头像");
         return fileUploadService.uploadAvatar(file);
     }
 
@@ -30,6 +34,7 @@ public class UploadController {
      */
     @PostMapping("/post")
     public Response<UploadVO> uploadPostImage(@RequestParam("file") MultipartFile file) {
+        log.info("POST /api/upload/post - 上传帖子图片");
         return fileUploadService.uploadPostImage(file);
     }
 }

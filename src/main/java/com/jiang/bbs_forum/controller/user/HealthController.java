@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.controller.user;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jiang.bbs_forum.common.Response;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class HealthController {
 
     /**
@@ -17,6 +20,7 @@ public class HealthController {
      */
     @GetMapping("/health")
     public Response<Map<String, String>> health() {
+        log.info("GET /api/health - 健康检查");
         return Response.success(Map.of(
                 "timestamp", LocalDateTime.now().toString(),
                 "version", "1.0.0"

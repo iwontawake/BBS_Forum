@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.controller.admin;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jiang.bbs_forum.common.PageResponse;
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.*;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin")
+@Slf4j
 public class AdminController {
 
     @Autowired
@@ -30,6 +33,7 @@ public class AdminController {
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/admin/users - 获取用户列表");
         return adminService.listUsers(keyword, page, size);
     }
 
@@ -40,6 +44,7 @@ public class AdminController {
     public Response<StatusVO> updateUserStatus(
             @PathVariable("id") int userId,
             @Valid @RequestBody UpdateUserStatusRequest request) {
+        log.info("PUT /api/admin/users/{}/status - 禁用/启用用户", userId);
         return adminService.updateUserStatus(userId, request.getStatus());
     }
 
@@ -52,6 +57,7 @@ public class AdminController {
     public Response<BoardVO> createBoard(@Valid @RequestBody CreateBoardRequest request,
                                          @RequestAttribute("userId") int adminId,
                                          HttpServletRequest httpRequest) {
+        log.info("POST /api/admin/boards - 新增板块, adminId={}", adminId);
         return adminService.createBoard(request, adminId, httpRequest.getRemoteAddr());
     }
 
@@ -63,6 +69,7 @@ public class AdminController {
                                          @Valid @RequestBody UpdateBoardRequest request,
                                          @RequestAttribute("userId") int adminId,
                                          HttpServletRequest httpRequest) {
+        log.info("PUT /api/admin/boards/{} - 修改板块, adminId={}", boardId, adminId);
         return adminService.updateBoard(boardId, request, adminId, httpRequest.getRemoteAddr());
     }
 
@@ -73,6 +80,7 @@ public class AdminController {
     public Response<Void> deleteBoard(@PathVariable("id") int boardId,
                                       @RequestAttribute("userId") int adminId,
                                       HttpServletRequest httpRequest) {
+        log.info("DELETE /api/admin/boards/{} - 删除板块, adminId={}", boardId, adminId);
         return adminService.deleteBoard(boardId, adminId, httpRequest.getRemoteAddr());
     }
 
@@ -84,6 +92,7 @@ public class AdminController {
     @PutMapping("/posts/{id}/top")
     public Response<StatusVO> toggleTop(@PathVariable("id") int postId,
                                         @RequestBody TopRequest request) {
+        log.info("PUT /api/admin/posts/{}/top - 帖子置顶/取消置顶, isTop={}", postId, request.getIsTop());
         return adminService.toggleTop(postId, request.getIsTop());
     }
 
@@ -93,6 +102,7 @@ public class AdminController {
     @PutMapping("/posts/{id}/essence")
     public Response<StatusVO> toggleEssence(@PathVariable("id") int postId,
                                             @RequestBody EssenceRequest request) {
+        log.info("PUT /api/admin/posts/{}/essence - 帖子加精/取消, isEssence={}", postId, request.getIsEssence());
         return adminService.toggleEssence(postId, request.getIsEssence());
     }
 
@@ -105,6 +115,7 @@ public class AdminController {
     public Response<PageResponse<LogVO>> getSystemLogs(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/admin/logs - 获取系统日志");
         return adminService.getSystemLogs(page, size);
     }
 }

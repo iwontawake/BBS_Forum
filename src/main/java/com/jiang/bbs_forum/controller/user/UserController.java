@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.controller.user;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jiang.bbs_forum.common.PageResponse;
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.ChangePasswordRequest;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -24,6 +27,7 @@ public class UserController {
      */
     @GetMapping("/current")
     public Response<UserVO> getCurrentUser(@RequestAttribute("userId") int userId) {
+        log.info("GET /api/users/current - 获取当前用户, userId={}", userId);
         return userService.getCurrentUser(userId);
     }
 
@@ -32,6 +36,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public Response<UserVO> getUserById(@PathVariable int id) {
+        log.info("GET /api/users/{} - 查看用户公开信息", id);
         return userService.getUserById(id);
     }
 
@@ -41,6 +46,7 @@ public class UserController {
     @PutMapping("/profile")
     public Response<ProfileVO> updateProfile(@RequestAttribute("userId") int userId,
                                              @Valid @RequestBody UpdateProfileRequest request) {
+        log.info("PUT /api/users/profile - 修改个人资料, userId={}", userId);
         return userService.updateProfile(userId, request);
     }
 
@@ -50,6 +56,7 @@ public class UserController {
     @PutMapping("/password")
     public Response<Void> changePassword(@RequestAttribute("userId") int userId,
                                          @Valid @RequestBody ChangePasswordRequest request) {
+        log.info("PUT /api/users/password - 修改密码, userId={}", userId);
         return userService.changePassword(userId, request);
     }
 
@@ -61,6 +68,7 @@ public class UserController {
             @RequestAttribute("userId") int userId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/users/points - 获取积分记录, userId={}", userId);
         return userService.getPointRecords(userId, page, size);
     }
 
@@ -69,6 +77,7 @@ public class UserController {
      */
     @GetMapping("/points/rank")
     public Response<List<RankItemVO>> getPointsRank(@RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/users/points/rank - 积分排行榜");
         return userService.getPointsRank(size);
     }
 
@@ -80,6 +89,7 @@ public class UserController {
             @RequestAttribute("userId") int userId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/users/posts - 我的帖子, userId={}", userId);
         return userService.getMyPosts(userId, page, size);
     }
 
@@ -91,6 +101,7 @@ public class UserController {
             @RequestAttribute("userId") int userId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/users/comments - 我的回复, userId={}", userId);
         return userService.getMyComments(userId, page, size);
     }
 
@@ -102,6 +113,7 @@ public class UserController {
             @RequestAttribute("userId") int userId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/users/favorites - 我的收藏, userId={}", userId);
         return userService.getMyFavorites(userId, page, size);
     }
 }

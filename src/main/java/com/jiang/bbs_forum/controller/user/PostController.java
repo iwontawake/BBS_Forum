@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.controller.user;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jiang.bbs_forum.common.PageResponse;
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.CreatePostRequest;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
+@Slf4j
 public class PostController {
 
     @Autowired
@@ -29,6 +32,7 @@ public class PostController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createTime") String orderBy) {
+        log.info("GET /api/posts - 获取帖子列表");
         return postService.listPosts(boardId, keyword, page, size, orderBy);
     }
 
@@ -37,6 +41,7 @@ public class PostController {
      */
     @GetMapping("/hot")
     public Response<List<PostVO>> getHotPosts(@RequestParam(defaultValue = "10") int size) {
+        log.info("GET /api/posts/hot - 获取热门帖子");
         return postService.getHotPosts(size);
     }
 
@@ -45,6 +50,7 @@ public class PostController {
      */
     @GetMapping("/{id}")
     public Response<PostVO> getPostById(@PathVariable int id) {
+        log.info("GET /api/posts/{} - 根据帖子ID获取详情", id);
         return postService.getPostById(id);
     }
 
@@ -54,6 +60,7 @@ public class PostController {
     @PostMapping
     public Response<PostVO> createPost(@RequestAttribute("userId") int userId,
                                        @Valid @RequestBody CreatePostRequest request) {
+        log.info("POST /api/posts - 发布帖子, userId={}", userId);
         return postService.createPost(userId, request);
     }
 
@@ -64,6 +71,7 @@ public class PostController {
     public Response<PostVO> updatePost(@RequestAttribute("userId") int userId,
                                        @PathVariable("id") int postId,
                                        @Valid @RequestBody UpdatePostRequest request) {
+        log.info("PUT /api/posts/{} - 修改帖子, userId={}", postId, userId);
         return postService.updatePost(userId, postId, request);
     }
 
@@ -73,6 +81,7 @@ public class PostController {
     @DeleteMapping("/{id}")
     public Response<Void> deletePost(@RequestAttribute("userId") int userId,
                                      @PathVariable("id") int postId) {
+        log.info("DELETE /api/posts/{} - 删除帖子, userId={}", postId, userId);
         return postService.deletePost(userId, postId);
     }
 }

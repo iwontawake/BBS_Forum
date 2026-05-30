@@ -1,5 +1,7 @@
 package com.jiang.bbs_forum.controller.user;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.response.BoardVO;
 import com.jiang.bbs_forum.service.user.BoardService;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards")
+@Slf4j
 public class BoardController {
 
     @Autowired
@@ -23,6 +26,7 @@ public class BoardController {
      */
     @GetMapping
     public Response<List<BoardVO>> listBoards() {
+        log.info("GET /api/boards - 获取所有板块");
         return boardService.listBoards();
     }
 
@@ -31,6 +35,7 @@ public class BoardController {
      */
     @GetMapping("/{id}")
     public Response<BoardVO> getBoardById(@PathVariable int id) {
+        log.info("GET /api/boards/{} - 根据板块ID获取详情", id);
         return boardService.getBoardById(id);
     }
 }
