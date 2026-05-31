@@ -34,7 +34,10 @@ public class JwtInterceptor implements HandlerInterceptor {
     private JwtUtils jwtUtils;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception {
+
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return true;
         }
@@ -44,43 +47,52 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         log.info(">>> 拦截器收到请求: {} {}", method, path);
 
+        String authHeader = request.getHeader("Authorization");
+
+        Integer userId = null;
+        String username = null;
+        String role = null;
+
+        //  1. 如果有 token，先解析（无论是否公开接口）
+        if (authHeader != null) {
+            String token = authHeader.startsWith("Bearer ")
+                    ? authHeader.substring(7)
+                    : authHeader;
+
+            if (jwtUtils.validateToken(token)) {
+                userId = jwtUtils.getUserId(token);
+                username = (String) jwtUtils.parseToken(token).get("username");
+                role = (String) jwtUtils.parseToken(token).get("role");
+
+                log.info(">>> token解析成功 userId={}", userId);
+
+                request.setAttribute("userId", userId);
+                request.setAttribute("username", username);
+                request.setAttribute("role", role);
+
+                UserContext.setUserId(userId);
+                UserContext.setUsername(username);
+                UserContext.setRole(role);
+            } else {
+                log.warn(">>> token无效");
+            }
+        }
+
+        // 2. 再判断是否公开接口
         if (isPublicPath(path, method)) {
             log.info(">>> 公开接口，放行: {} {}", method, path);
             return true;
         }
 
-        String authHeader = request.getHeader("Authorization");
-        log.info(">>> Authorization头: {}", authHeader);
-
-        if (authHeader == null) {
-            log.warn(">>> 未登录 [{} {}], 未提供Authorization头", method, path);
+        //3. 非公开接口必须登录
+        if (userId == null) {
+            log.warn(">>> 未登录访问: {} {}", method, path);
             response.setStatus(401);
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write("{\"code\":401,\"message\":\"未登录\",\"data\":null}");
             return false;
         }
 
-        String token = authHeader.startsWith("Bearer ") ? authHeader.substring(7) : authHeader;
-        if (!jwtUtils.validateToken(token)) {
-            log.warn(">>> token校验失败 [{} {}]", method, path);
-            response.setStatus(401);
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write("{\"code\":401,\"message\":\"token无效或已过期\",\"data\":null}");
-            return false;
-        }
-
-        int userId = jwtUtils.getUserId(token);
-        String username = (String) jwtUtils.parseToken(token).get("username");
-        String role = (String) jwtUtils.parseToken(token).get("role");
-
-        log.info(">>> token校验通过, userId={}", userId);
-        request.setAttribute("userId", userId);
-        request.setAttribute("username", username);
-        request.setAttribute("role", role);
-
-        UserContext.setUserId(userId);
-        UserContext.setUsername(username);
-        UserContext.setRole(role);
         return true;
     }
 

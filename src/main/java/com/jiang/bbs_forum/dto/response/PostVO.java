@@ -83,4 +83,5 @@ public class PostVO {
      * 更新时间
      */
     private String updateTime;
+    private Boolean liked;
 }

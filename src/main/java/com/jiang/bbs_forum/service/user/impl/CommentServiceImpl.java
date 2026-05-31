@@ -10,6 +10,7 @@ import com.jiang.bbs_forum.entity.Comment;
 import com.jiang.bbs_forum.entity.Post;
 import com.jiang.bbs_forum.entity.User;
 import com.jiang.bbs_forum.mapper.CommentMapper;
+import com.jiang.bbs_forum.mapper.LikeMapper;
 import com.jiang.bbs_forum.mapper.PostMapper;
 import com.jiang.bbs_forum.mapper.UserMapper;
 import com.jiang.bbs_forum.service.user.CommentService;
@@ -34,10 +35,13 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserMapper userMapper;
 
-    @Override
-    public Response<PageResponse<CommentVO>> listComments(int postId, int page, int size) {
+    @Autowired
+    private LikeMapper likeMapper;
 
-        // 查询当前帖子所有未删除评论
+    @Override
+    public Response<PageResponse<CommentVO>> listComments(Integer userId, int postId, int page, int size) {
+
+        // 查询当前帖子下所有未删除评论
         List<Comment> comments = commentMapper.selectList(
                 new LambdaQueryWrapper<Comment>()
                         .eq(Comment::getPostId, postId)
@@ -54,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
             return Response.success(empty);
         }
 
-        // 批量查询用户信息，避免N+1查询
+        // 批量查询评论发布者信息，避免N+1查询
         List<Integer> userIds = comments.stream()
                 .map(Comment::getUserId)
                 .distinct()
@@ -64,10 +68,37 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .collect(Collectors.toMap(User::getId, u -> u));
 
+        // 批量查询当前用户对评论的点赞状态（优化：避免逐条查询）
+        List<Integer> commentIds = comments.stream()
+                .map(Comment::getId)
+                .collect(Collectors.toList());
+
+        Map<Integer, Boolean> likeMap = new HashMap<>();
+
+        if (!commentIds.isEmpty()) {
+
+            LambdaQueryWrapper<com.jiang.bbs_forum.entity.Like> wrapper =
+                    new LambdaQueryWrapper<>();
+
+            wrapper.eq(com.jiang.bbs_forum.entity.Like::getUserId, userId)
+                    .eq(com.jiang.bbs_forum.entity.Like::getTargetType, 2)
+                    .in(com.jiang.bbs_forum.entity.Like::getTargetId, commentIds);
+
+            List<com.jiang.bbs_forum.entity.Like> likes = likeMapper.selectList(wrapper);
+
+            Set<Integer> likedSet = likes.stream()
+                    .map(com.jiang.bbs_forum.entity.Like::getTargetId)
+                    .collect(Collectors.toSet());
+
+            for (Integer id : commentIds) {
+                likeMap.put(id, likedSet.contains(id));
+            }
+        }
+
+        // 构建VO列表（包含用户信息、点赞状态、@用户信息）
         Map<Integer, CommentVO> voMap = new HashMap<>();
         List<CommentVO> allVO = new ArrayList<>();
 
-        // 转换为VO并填充用户信息
         for (Comment c : comments) {
 
             User user = userMap.get(c.getUserId());
@@ -85,6 +116,9 @@ public class CommentServiceImpl implements CommentService {
 
             vo.setLikeCount(c.getLikeCount());
 
+            // 设置当前用户是否点赞该评论
+            vo.setIsLiked(likeMap.getOrDefault(c.getId(), false));
+
             vo.setCreateTime(
                     c.getCreateTime() == null ? null :
                             c.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
@@ -92,13 +126,12 @@ public class CommentServiceImpl implements CommentService {
 
             vo.setChildren(new ArrayList<>());
 
+            // 解析@用户并查询有效用户信息
             String atNames = c.getAtUsernames();
 
             if (atNames != null && !atNames.isBlank()) {
 
-                List<String> usernames =
-                        Arrays.stream(atNames.split(","))
-                                .toList();
+                List<String> usernames = Arrays.stream(atNames.split(",")).toList();
 
                 List<User> atUsers = userMapper.selectList(
                         new LambdaQueryWrapper<User>()
@@ -119,7 +152,7 @@ public class CommentServiceImpl implements CommentService {
             allVO.add(vo);
         }
 
-        // 构建评论树结构
+        // 构建评论树结构（一级评论 + 子评论）
         List<CommentVO> roots = new ArrayList<>();
 
         for (CommentVO vo : allVO) {
@@ -133,6 +166,7 @@ public class CommentServiceImpl implements CommentService {
             }
         }
 
+        // 分页处理（仅对一级评论分页）
         int fromIndex = Math.min((page - 1) * size, roots.size());
         int toIndex = Math.min(fromIndex + size, roots.size());
 

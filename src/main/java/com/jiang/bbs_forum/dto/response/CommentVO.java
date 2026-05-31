@@ -69,4 +69,5 @@ public class CommentVO {
      * 子回复列表
      */
     private List<CommentVO> children;
+    private Boolean isLiked;
 }
