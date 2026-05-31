@@ -18,6 +18,7 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
+
     /**
      * 点赞（帖子或回复）
      */

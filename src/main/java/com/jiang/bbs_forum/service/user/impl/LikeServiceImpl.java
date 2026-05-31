@@ -43,6 +43,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public Response<Void> like(int userId, int targetType, int targetId) {
 
+
         if (targetType == 1 && postMapper.selectById(targetId) == null) {
             return Response.error(404, "帖子不存在");
         }
@@ -171,7 +172,6 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public Response<Boolean> isLiked(int userId, int targetType, int targetId) {
 
-        System.out.println("isLiked check: userId=" + userId);
         LambdaQueryWrapper<Like> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Like::getUserId, userId)
                 .eq(Like::getTargetType, targetType)

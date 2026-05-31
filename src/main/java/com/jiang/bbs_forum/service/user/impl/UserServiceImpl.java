@@ -1,13 +1,14 @@
 package com.jiang.bbs_forum.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiang.bbs_forum.common.PageResponse;
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.ChangePasswordRequest;
 import com.jiang.bbs_forum.dto.request.UpdateProfileRequest;
 import com.jiang.bbs_forum.dto.response.*;
-import com.jiang.bbs_forum.entity.User;
-import com.jiang.bbs_forum.entity.UserProfile;
+import com.jiang.bbs_forum.entity.*;
 import com.jiang.bbs_forum.mapper.*;
 import com.jiang.bbs_forum.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private PointRecordMapper pointRecordMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private LikeMapper likeMapper;
 
     // ==================== A模块：资料相关 ====================
 
@@ -148,22 +152,219 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    //分页查询我的帖子
     @Override
     public Response<PageResponse<PostVO>> getMyPosts(int userId, int page, int size) {
-        // TODO: 分页查询我的帖子
-        return null;
+
+        Page<Post> p = new Page<>(page, size);
+
+        IPage<Post> result = postMapper.selectPage(
+                p,
+                new LambdaQueryWrapper<Post>()
+                        .eq(Post::getUserId, userId)
+                        .orderByDesc(Post::getCreateTime)
+        );
+
+        List<Post> posts = result.getRecords();
+
+        if (posts.isEmpty()) {
+            return Response.success(new PageResponse<>(0L, List.of(), page, size));
+        }
+
+        //批量预查询
+
+        List<Integer> postIds = posts.stream()
+                .map(Post::getId)
+                .toList();
+
+        // 1. 查当前用户点赞过哪些帖子
+        List<Integer> likedIds = likeMapper.selectObjs(
+                new LambdaQueryWrapper<Like>()
+                        .select(Like::getTargetId)
+                        .eq(Like::getUserId, userId)
+                        .eq(Like::getTargetType, 1)
+                        .in(Like::getTargetId, postIds)
+        ).stream().map(o -> (Integer) o).toList();
+
+        // 2. 查当前用户收藏过哪些帖子
+        List<Integer> favoritedIds = favoriteMapper.selectObjs(
+                new LambdaQueryWrapper<Favorite>()
+                        .select(Favorite::getPostId)
+                        .eq(Favorite::getUserId, userId)
+                        .in(Favorite::getPostId, postIds)
+        ).stream().map(o -> (Integer) o).toList();
+
+        // 转 Set 提速 O(1)
+        Set<Integer> likedSet = likedIds.stream().collect(java.util.stream.Collectors.toSet());
+        Set<Integer> favSet = favoritedIds.stream().collect(java.util.stream.Collectors.toSet());
+
+        // VO 构建
+        List<PostVO> list = posts.stream().map(post -> {
+
+            PostVO vo = new PostVO();
+            vo.setId(post.getId());
+            vo.setTitle(post.getTitle());
+            vo.setContent(post.getContent());
+            vo.setLikeCount(post.getLikeCount());
+            vo.setCommentCount(post.getCommentCount());
+
+            vo.setLiked(likedSet.contains(post.getId()));
+            vo.setFavorited(favSet.contains(post.getId()));
+
+            vo.setCreateTime(post.getCreateTime() != null
+                    ? post.getCreateTime().format(DTF)
+                    : null);
+
+            return vo;
+        }).toList();
+
+        return Response.success(
+                new PageResponse<>(result.getTotal(), list, page, size)
+        );
     }
 
+    // 分页查询我的回复
     @Override
     public Response<PageResponse<CommentVO>> getMyComments(int userId, int page, int size) {
-        // TODO: 分页查询我的回复
-        return null;
+
+        Page<Comment> p = new Page<>(page, size);
+
+        IPage<Comment> result = commentMapper.selectPage(
+                p,
+                new LambdaQueryWrapper<Comment>()
+                        .eq(Comment::getUserId, userId)
+                        .orderByDesc(Comment::getCreateTime)
+        );
+
+        List<CommentVO> list = result.getRecords().stream().map(c -> {
+
+            CommentVO vo = new CommentVO();
+            vo.setId(c.getId());
+            vo.setPostId(c.getPostId());
+            vo.setContent(c.getContent());
+            vo.setCreateTime(c.getCreateTime() != null ? c.getCreateTime().format(DTF) : null);
+
+            return vo;
+        }).toList();
+
+        return Response.success(
+                new PageResponse<>(result.getTotal(), list, page, size)
+        );
     }
 
+    //分页查询我的收藏
     @Override
     public Response<PageResponse<PostVO>> getMyFavorites(int userId, int page, int size) {
-        // TODO: 分页查询我的收藏
-        return null;
+
+        int offset = (page - 1) * size;
+
+        List<Integer> postIds = favoriteMapper.selectObjs(
+                new LambdaQueryWrapper<Favorite>()
+                        .select(Favorite::getPostId)
+                        .eq(Favorite::getUserId, userId)
+                        .orderByDesc(Favorite::getCreateTime)
+                        .last("limit " + offset + "," + size)
+        ).stream().map(o -> (Integer) o).toList();
+
+        if (postIds.isEmpty()) {
+            return Response.success(new PageResponse<>(0L, List.of(), page, size));
+        }
+
+        List<Post> posts = postMapper.selectBatchIds(postIds);
+
+        List<PostVO> list = posts.stream().map(post -> {
+
+            PostVO vo = new PostVO();
+
+            vo.setId(post.getId());
+            vo.setTitle(post.getTitle());
+            vo.setContent(post.getContent());
+            vo.setLikeCount(post.getLikeCount());
+            vo.setCommentCount(post.getCommentCount());
+            vo.setFavorited(true);
+
+            vo.setLiked(
+                    likeMapper.selectCount(
+                            new LambdaQueryWrapper<Like>()
+                                    .eq(Like::getUserId, userId)
+                                    .eq(Like::getTargetType, 1)
+                                    .eq(Like::getTargetId, post.getId())
+                    ) > 0
+            );
+
+            vo.setFavorited(true);
+            vo.setLiked(false);
+
+            vo.setCreateTime(post.getCreateTime() != null ? post.getCreateTime().format(DTF) : null);
+
+            return vo;
+        }).toList();
+
+        Long total = favoriteMapper.selectCount(
+                new LambdaQueryWrapper<Favorite>()
+                        .eq(Favorite::getUserId, userId)
+        );
+
+        return Response.success(
+                new PageResponse<>(total, list, page, size)
+        );
+    }
+
+    //分页查询我的点赞
+    @Override
+    public Response<PageResponse<PostVO>> getMyLikes(int userId, int page, int size) {
+
+        int offset = (page - 1) * size;
+
+        List<Integer> postIds = likeMapper.selectObjs(
+                new LambdaQueryWrapper<Like>()
+                        .select(Like::getTargetId)
+                        .eq(Like::getUserId, userId)
+                        .eq(Like::getTargetType, 1)
+                        .orderByDesc(Like::getCreateTime)
+                        .last("limit " + offset + "," + size)
+        ).stream().map(o -> (Integer) o).toList();
+
+        if (postIds.isEmpty()) {
+            return Response.success(new PageResponse<>(0L, List.of(), page, size));
+        }
+
+        List<Post> posts = postMapper.selectBatchIds(postIds);
+
+        List<PostVO> list = posts.stream().map(post -> {
+
+            PostVO vo = new PostVO();
+
+            vo.setId(post.getId());
+            vo.setTitle(post.getTitle());
+            vo.setContent(post.getContent());
+            vo.setLikeCount(post.getLikeCount());
+            vo.setCommentCount(post.getCommentCount());
+
+            vo.setLiked(true);
+
+            vo.setFavorited(
+                    favoriteMapper.selectCount(
+                            new LambdaQueryWrapper<Favorite>()
+                                    .eq(Favorite::getUserId, userId)
+                                    .eq(Favorite::getPostId, post.getId())
+                    ) > 0
+            );
+
+            vo.setCreateTime(post.getCreateTime() != null ? post.getCreateTime().format(DTF) : null);
+
+            return vo;
+        }).toList();
+
+        Long total = likeMapper.selectCount(
+                new LambdaQueryWrapper<Like>()
+                        .eq(Like::getUserId, userId)
+                        .eq(Like::getTargetType, 1)
+        );
+
+        return Response.success(
+                new PageResponse<>(total, list, page, size)
+        );
     }
 
     // ==================== 工具方法 ====================

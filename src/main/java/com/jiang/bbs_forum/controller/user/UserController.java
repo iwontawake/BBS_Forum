@@ -116,4 +116,18 @@ public class UserController {
         log.info("GET /api/users/favorites - 我的收藏, userId={}", userId);
         return userService.getMyFavorites(userId, page, size);
     }
+
+    /**
+     * 获取我的点赞（分页）
+     */
+    @GetMapping("/likes")
+    public Response<PageResponse<PostVO>> getMyLikes(
+            @RequestAttribute("userId") int userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        log.info("GET /api/users/likes - 我的点赞, userId={}", userId);
+
+        return userService.getMyLikes(userId, page, size);
+    }
 }

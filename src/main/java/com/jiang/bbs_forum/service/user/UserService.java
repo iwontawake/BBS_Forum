@@ -26,4 +26,6 @@ public interface UserService {
     Response<PageResponse<CommentVO>> getMyComments(int userId, int page, int size);
 
     Response<PageResponse<PostVO>> getMyFavorites(int userId, int page, int size);
+
+    Response<PageResponse<PostVO>> getMyLikes(int userId, int page, int size);
 }
