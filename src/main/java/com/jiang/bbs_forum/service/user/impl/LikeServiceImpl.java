@@ -1,6 +1,7 @@
 package com.jiang.bbs_forum.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.LikeBatchRequest;
 import com.jiang.bbs_forum.dto.response.LikeBatchVO;
@@ -11,8 +12,10 @@ import com.jiang.bbs_forum.mapper.CommentMapper;
 import com.jiang.bbs_forum.mapper.LikeMapper;
 import com.jiang.bbs_forum.mapper.PostMapper;
 import com.jiang.bbs_forum.service.user.LikeService;
+import com.jiang.bbs_forum.service.user.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,61 +35,66 @@ public class LikeServiceImpl implements LikeService {
     @Autowired
     private CommentMapper commentMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     /**
-     * 用户点赞
-     *
-     * @param userId 用户ID
-     * @param targetType 点赞目标类型（1-帖子，2-评论）
-     * @param targetId 点赞目标ID
-     * @return 操作结果
+     * 点赞（帖子 / 评论）- 加上事务确保多表操作要么同时成功，要么同时失败
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Response<Void> like(int userId, int targetType, int targetId) {
 
+        Integer ownerId = null;
 
-        if (targetType == 1 && postMapper.selectById(targetId) == null) {
-            return Response.error(404, "帖子不存在");
+        // ===== 1. 查目标所属用户 =====
+        if (targetType == 1) {
+            Post post = postMapper.selectById(targetId);
+            if (post == null) {
+                return Response.error(404, "帖子不存在");
+            }
+            ownerId = post.getUserId();
+        } else if (targetType == 2) {
+            Comment comment = commentMapper.selectById(targetId);
+            if (comment == null) {
+                return Response.error(404, "评论不存在");
+            }
+            ownerId = comment.getUserId();
         }
 
-        if (targetType == 2 && commentMapper.selectById(targetId) == null) {
-            return Response.error(404, "评论不存在");
-        }
-
-        // 查询当前用户是否已经点赞过该目标
+        // ===== 2. 判断是否已点赞 =====
         LambdaQueryWrapper<Like> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Like::getUserId, userId)
                 .eq(Like::getTargetType, targetType)
                 .eq(Like::getTargetId, targetId);
 
-        // 已点赞则直接返回
         if (likeMapper.selectCount(wrapper) > 0) {
             return Response.success("已点赞", null);
         }
 
-        // 创建点赞记录
+        // ===== 3. 插入点赞 =====
         Like like = new Like();
         like.setUserId(userId);
         like.setTargetType(targetType);
         like.setTargetId(targetId);
-
-        // 保存点赞记录
         likeMapper.insert(like);
 
-        // 更新帖子或评论的点赞数量
+        // ===== 4. 原子更新点赞数（抗并发） =====
         updateLikeCount(targetType, targetId, 1);
+
+        // ===== 5. 触发通知 =====
+        if (ownerId != null && !ownerId.equals(userId)) { // 用 .equals 更规范
+            notificationService.notifyLike(userId, ownerId, targetType, targetId);
+        }
 
         return Response.success("点赞成功", null);
     }
 
     /**
      * 取消点赞
-     *
-     * @param userId 用户ID
-     * @param targetType 点赞目标类型（1-帖子，2-评论）
-     * @param targetId 点赞目标ID
-     * @return 操作结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Response<Void> unlike(int userId, int targetType, int targetId) {
 
         LambdaQueryWrapper<Like> wrapper = new LambdaQueryWrapper<>();
@@ -94,10 +102,8 @@ public class LikeServiceImpl implements LikeService {
                 .eq(Like::getTargetType, targetType)
                 .eq(Like::getTargetId, targetId);
 
-        // 删除点赞记录
         int deleted = likeMapper.delete(wrapper);
 
-        // 删除成功后同步减少点赞数
         if (deleted > 0) {
             updateLikeCount(targetType, targetId, -1);
         }
@@ -106,91 +112,50 @@ public class LikeServiceImpl implements LikeService {
     }
 
     /**
-
-     * 更新点赞数量
-     *
-     * @param targetType 点赞目标类型（1-帖子，2-评论）
-     * @param targetId 点赞目标ID
-     * @param delta 增量（1表示增加，-1表示减少）
+     * 原子更新点赞数：直接利用 SQL 进行加减，防止并发时数据算错
      */
     private void updateLikeCount(int targetType, int targetId, int delta) {
+        String operator = delta > 0 ? "+" : "-";
 
-        // 更新帖子点赞数
         if (targetType == 1) {
-
-            Post post = postMapper.selectById(targetId);
-
-            if (post != null) {
-
-                Integer count = post.getLikeCount();
-
-                if (count == null) {
-                    count = 0;
-                }
-
-                post.setLikeCount(
-                        Math.max(0, count + delta)
-                );
-
-                postMapper.updateById(post);
-            }
-
+            UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id", targetId)
+                    // 相当于 SQL: set like_count = max(0, like_count + 1) 防止减成负数
+                    .setSql("like_count = greatest(0, coalesce(like_count, 0) " + operator + " 1)");
+            postMapper.update(null, updateWrapper);
         }
 
-        // 更新评论点赞数
         if (targetType == 2) {
-
-            Comment comment = commentMapper.selectById(targetId);
-
-            if (comment != null) {
-
-                Integer count = comment.getLikeCount();
-
-                if (count == null) {
-                    count = 0;
-                }
-
-                comment.setLikeCount(
-                        Math.max(0, count + delta)
-                );
-
-                commentMapper.updateById(comment);
-            }
-
+            UpdateWrapper<Comment> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id", targetId)
+                    .setSql("like_count = greatest(0, coalesce(like_count, 0) " + operator + " 1)");
+            commentMapper.update(null, updateWrapper);
         }
     }
 
-
     /**
-     * 查询当前用户是否已点赞
-     *
-     * @param userId 用户ID
-     * @param targetType 点赞目标类型（1-帖子，2-评论）
-     * @param targetId 点赞目标ID
-     * @return true-已点赞，false-未点赞
+     * 是否点赞
      */
     @Override
     public Response<Boolean> isLiked(int userId, int targetType, int targetId) {
-
         LambdaQueryWrapper<Like> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Like::getUserId, userId)
                 .eq(Like::getTargetType, targetType)
                 .eq(Like::getTargetId, targetId);
 
-        Long count = likeMapper.selectCount(wrapper);
-
-        return Response.success(count > 0);
+        return Response.success(likeMapper.selectCount(wrapper) > 0);
     }
 
+    /**
+     * 批量获取状态
+     */
     @Override
     public Response<LikeBatchVO> batchStatus(int userId, LikeBatchRequest request) {
-
         LikeBatchVO vo = new LikeBatchVO();
         Map<Integer, Boolean> map = new HashMap<>();
 
-        // 1. 查询帖子点赞状态
+        // ===== 帖子点赞状态 =====
         if (request.getPostId() != null) {
-
             LambdaQueryWrapper<Like> postWrapper = new LambdaQueryWrapper<>();
             postWrapper.eq(Like::getUserId, userId)
                     .eq(Like::getTargetType, 1)
@@ -199,28 +164,22 @@ public class LikeServiceImpl implements LikeService {
             vo.setPostLiked(likeMapper.selectCount(postWrapper) > 0);
         }
 
-        // 2. 批量查询评论点赞状态（优化关键）
+        // ===== 评论点赞状态 =====
         if (request.getCommentIds() != null && !request.getCommentIds().isEmpty()) {
-
             LambdaQueryWrapper<Like> commentWrapper = new LambdaQueryWrapper<>();
             commentWrapper.eq(Like::getUserId, userId)
                     .eq(Like::getTargetType, 2)
                     .in(Like::getTargetId, request.getCommentIds());
 
             List<Like> likes = likeMapper.selectList(commentWrapper);
+            Set<Integer> likedIds = likes.stream().map(Like::getTargetId).collect(Collectors.toSet());
 
-            Set<Integer> likedIds = likes.stream()
-                    .map(Like::getTargetId)
-                    .collect(Collectors.toSet());
-
-            for (Integer cid : request.getCommentIds()) {
-                map.put(cid, likedIds.contains(cid));
+            for (Integer id : request.getCommentIds()) {
+                map.put(id, likedIds.contains(id));
             }
         }
 
         vo.setCommentLikeMap(map);
-
         return Response.success(vo);
     }
-
 }

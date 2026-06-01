@@ -5,6 +5,8 @@ import com.jiang.bbs_forum.dto.request.LikeBatchRequest;
 import com.jiang.bbs_forum.dto.request.LikeRequest;
 import com.jiang.bbs_forum.dto.response.LikeBatchVO;
 import com.jiang.bbs_forum.service.user.LikeService;
+import com.jiang.bbs_forum.service.user.NotificationService;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,4 +84,5 @@ public class LikeController {
                 targetId
         );
     }
+
 }

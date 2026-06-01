@@ -5,6 +5,7 @@ import com.jiang.bbs_forum.common.PageResponse;
 import com.jiang.bbs_forum.common.Response;
 import com.jiang.bbs_forum.dto.request.CreateCommentRequest;
 import com.jiang.bbs_forum.dto.request.UpdateCommentRequest;
+import com.jiang.bbs_forum.dto.response.AtUserVO;
 import com.jiang.bbs_forum.dto.response.CommentVO;
 import com.jiang.bbs_forum.entity.Comment;
 import com.jiang.bbs_forum.entity.Post;
@@ -14,9 +15,10 @@ import com.jiang.bbs_forum.mapper.LikeMapper;
 import com.jiang.bbs_forum.mapper.PostMapper;
 import com.jiang.bbs_forum.mapper.UserMapper;
 import com.jiang.bbs_forum.service.user.CommentService;
+import com.jiang.bbs_forum.service.user.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.jiang.bbs_forum.dto.response.AtUserVO;
+
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -36,12 +38,16 @@ public class CommentServiceImpl implements CommentService {
     private UserMapper userMapper;
 
     @Autowired
-    private LikeMapper likeMapper;
+    private NotificationService notificationService;
 
+    @Autowired
+    private LikeMapper likeMapper;
+    /**
+     * 查询评论列表（树结构）
+     */
     @Override
     public Response<PageResponse<CommentVO>> listComments(Integer userId, int postId, int page, int size) {
 
-        // 查询当前帖子下所有未删除评论
         List<Comment> comments = commentMapper.selectList(
                 new LambdaQueryWrapper<Comment>()
                         .eq(Comment::getPostId, postId)
@@ -58,7 +64,6 @@ public class CommentServiceImpl implements CommentService {
             return Response.success(empty);
         }
 
-        // 批量查询评论发布者信息，避免N+1查询
         List<Integer> userIds = comments.stream()
                 .map(Comment::getUserId)
                 .distinct()
@@ -68,7 +73,6 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .collect(Collectors.toMap(User::getId, u -> u));
 
-        // 批量查询当前用户对评论的点赞状态（优化：避免逐条查询）
         List<Integer> commentIds = comments.stream()
                 .map(Comment::getId)
                 .collect(Collectors.toList());
@@ -95,7 +99,6 @@ public class CommentServiceImpl implements CommentService {
             }
         }
 
-        // 构建VO列表（包含用户信息、点赞状态、@用户信息）
         Map<Integer, CommentVO> voMap = new HashMap<>();
         List<CommentVO> allVO = new ArrayList<>();
 
@@ -115,8 +118,6 @@ public class CommentServiceImpl implements CommentService {
             vo.setAvatar(user == null ? "default.png" : user.getAvatar());
 
             vo.setLikeCount(c.getLikeCount());
-
-            // 设置当前用户是否点赞该评论
             vo.setIsLiked(likeMap.getOrDefault(c.getId(), false));
 
             vo.setCreateTime(
@@ -126,33 +127,10 @@ public class CommentServiceImpl implements CommentService {
 
             vo.setChildren(new ArrayList<>());
 
-            // 解析@用户并查询有效用户信息
-            String atNames = c.getAtUsernames();
-
-            if (atNames != null && !atNames.isBlank()) {
-
-                List<String> usernames = Arrays.stream(atNames.split(",")).toList();
-
-                List<User> atUsers = userMapper.selectList(
-                        new LambdaQueryWrapper<User>()
-                                .in(User::getUsername, usernames)
-                );
-
-                List<AtUserVO> atUserVOList = atUsers.stream().map(u -> {
-                    AtUserVO item = new AtUserVO();
-                    item.setUserId(u.getId());
-                    item.setUsername(u.getUsername());
-                    return item;
-                }).toList();
-
-                vo.setAtUsers(atUserVOList);
-            }
-
             voMap.put(vo.getId(), vo);
             allVO.add(vo);
         }
 
-        // 构建评论树结构（一级评论 + 子评论）
         List<CommentVO> roots = new ArrayList<>();
 
         for (CommentVO vo : allVO) {
@@ -166,7 +144,6 @@ public class CommentServiceImpl implements CommentService {
             }
         }
 
-        // 分页处理（仅对一级评论分页）
         int fromIndex = Math.min((page - 1) * size, roots.size());
         int toIndex = Math.min(fromIndex + size, roots.size());
 
@@ -181,24 +158,17 @@ public class CommentServiceImpl implements CommentService {
         return Response.success(result);
     }
 
+    /**
+     * 创建评论（核心：已接入通知系统）
+     */
     @Override
     public Response<CommentVO> createComment(int userId, CreateCommentRequest request) {
 
-        // 1. 校验帖子是否存在
         Post post = postMapper.selectById(request.getPostId());
         if (post == null) {
             return Response.error(404, "帖子不存在");
         }
 
-        // 2. 校验父评论（楼中楼）
-        if (request.getParentId() != null) {
-            Comment parent = commentMapper.selectById(request.getParentId());
-            if (parent == null) {
-                return Response.error(404, "父评论不存在");
-            }
-        }
-
-        // 3. 构建评论实体
         Comment comment = new Comment();
         comment.setUserId(userId);
         comment.setPostId(request.getPostId());
@@ -206,7 +176,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setContent(request.getContent());
         comment.setLikeCount(0);
 
-        // 4. 解析@用户
         List<String> atUsernames = extractAtUsernames(request.getContent());
 
         List<User> atUsers = new ArrayList<>();
@@ -230,10 +199,56 @@ public class CommentServiceImpl implements CommentService {
             comment.setAtUsernames(String.join(",", existNames));
         }
 
-        // 5. 插入评论
         commentMapper.insert(comment);
 
-        // 6. 更新帖子评论数
+        /**
+         * 评论帖子通知（统一入口）
+         */
+        if (request.getParentId() != null) {
+            // 【分支A】如果是回复别人的评论（楼中楼）
+            Comment parentComment = commentMapper.selectById(request.getParentId());
+
+            // 只通知被回复的层主，不轰炸楼主
+            if (parentComment != null && !parentComment.getUserId().equals(userId)) {
+                notificationService.notifyComment(
+                        userId,
+                        parentComment.getUserId(),
+                        2,                          // targetType = 2 (评论)
+                        parentComment.getId(),
+                        request.getContent()        // 传入真实的回复内容！
+                );
+            }
+        } else {
+            // 【分支B】如果是直接评论帖子（根评论）
+            // 只有当不是自己评论自己时，才通知楼主
+            if (!post.getUserId().equals(userId)) {
+                notificationService.notifyComment(
+                        userId,
+                        post.getUserId(),
+                        1,                          // targetType = 1 (帖子)
+                        post.getId(),
+                        request.getContent()        // 传入真实的评论内容！
+                );
+            }
+        }
+
+        /**
+         * ✔ @用户通知
+         */
+        for (User atUser : atUsers) {
+
+            if (!atUser.getId().equals(userId)) {
+
+                notificationService.notifyAt(
+                        userId,
+                        atUser.getId(),
+                        2,
+                        comment.getId()
+                );
+            }
+        }
+
+        // 更新帖子评论数
         Post update = new Post();
         update.setId(post.getId());
         update.setCommentCount(
@@ -241,10 +256,8 @@ public class CommentServiceImpl implements CommentService {
         );
         postMapper.updateById(update);
 
-        // 7. 当前用户信息
         User user = userMapper.selectById(userId);
 
-        // 8. 构建 VO
         CommentVO vo = new CommentVO();
         vo.setId(comment.getId());
         vo.setPostId(comment.getPostId());
@@ -260,14 +273,11 @@ public class CommentServiceImpl implements CommentService {
 
         vo.setCreateTime(
                 comment.getCreateTime() == null ? null :
-                        comment.getCreateTime().format(
-                                java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                        )
+                        comment.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         );
 
-        vo.setChildren(new java.util.ArrayList<>());
+        vo.setChildren(new ArrayList<>());
 
-        // 9. @用户返回结构（有效用户）
         List<AtUserVO> atUserVOList = atUsers.stream().map(u -> {
             AtUserVO item = new AtUserVO();
             item.setUserId(u.getId());
@@ -278,11 +288,7 @@ public class CommentServiceImpl implements CommentService {
         vo.setAtUsers(atUserVOList);
         vo.setInvalidAtUsers(invalidUsers);
 
-        String msg = invalidUsers.isEmpty()
-                ? "评论成功"
-                : "评论成功（部分@用户不存在）";
-
-        return Response.success(msg, vo);
+        return Response.success("评论成功", vo);
     }
 
     @Override
@@ -337,34 +343,20 @@ public class CommentServiceImpl implements CommentService {
             return Response.error(403, "无权限删除");
         }
 
-        comment.setIsDeleted(1);
-        commentMapper.updateById(comment);
-        // 递归删除所有子评论
         deleteCommentRecursively(commentId);
 
-        // 删除该评论的所有子评论（楼中楼）
-        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getParentId, commentId);
-
-        List<Comment> children = commentMapper.selectList(wrapper);
-        for (Comment child : children) {
-            child.setIsDeleted(1);
-            commentMapper.updateById(child);
-        }
+        comment.setIsDeleted(1);
+        commentMapper.updateById(comment);
 
         Post post = postMapper.selectById(comment.getPostId());
-
         if (post != null) {
             Post update = new Post();
             update.setId(post.getId());
-
-            Integer count = post.getCommentCount();
-            if (count == null || count <= 0) {
-                count = 0;
-            }
-
-            update.setCommentCount(count - 1);
-
+            update.setCommentCount(
+                    Math.max(0,
+                            (post.getCommentCount() == null ? 0 : post.getCommentCount()) - 1
+                    )
+            );
             postMapper.updateById(update);
         }
 
@@ -373,29 +365,25 @@ public class CommentServiceImpl implements CommentService {
 
     private void deleteCommentRecursively(Integer commentId) {
 
-        // 查出所有直接子评论
-        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getParentId, commentId);
-
-        List<Comment> children = commentMapper.selectList(wrapper);
+        List<Comment> children = commentMapper.selectList(
+                new LambdaQueryWrapper<Comment>()
+                        .eq(Comment::getParentId, commentId)
+        );
 
         for (Comment child : children) {
-            // 递归删除子节点
             deleteCommentRecursively(child.getId());
-
-            // 删除当前子节点（逻辑删除）
             child.setIsDeleted(1);
             commentMapper.updateById(child);
         }
     }
 
     private List<String> extractAtUsernames(String content) {
+
         List<String> result = new ArrayList<>();
 
         if (content == null || content.trim().isEmpty()) {
             return result;
         }
-
 
         Pattern pattern = Pattern.compile("@([a-zA-Z0-9_\\u4e00-\\u9fa5]+)");
         Matcher matcher = pattern.matcher(content);
@@ -404,7 +392,6 @@ public class CommentServiceImpl implements CommentService {
             result.add(matcher.group(1));
         }
 
-        return result.stream().distinct().collect(Collectors.toList());
+        return result.stream().distinct().toList();
     }
-
 }
